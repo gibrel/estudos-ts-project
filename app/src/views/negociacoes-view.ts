@@ -15,7 +15,6 @@ export class NegociacaoesView extends View<Negociacoes>{
             <thead>
             <tbody>
                 ${model.lista().map(negociacao => {
-                    console.log(negociacao);
                     return `
                         <tr>
                             <td>

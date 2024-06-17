@@ -1,8 +1,7 @@
 # projeto
-/node_modules
-/servidor-api/node_modules
+*/node_modules
+*/dist/js
 package-lock.json
-/dist/js
 
 # Logs
 logs
@@ -95,7 +94,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+# dist
 
 # Gatsby files
 .cache/
