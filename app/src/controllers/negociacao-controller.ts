@@ -1,3 +1,4 @@
+import { domInject } from "../decorators/dom-injector.js";
 import { inspecionar } from "../decorators/inspecionar.js";
 import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
 import { DiasUteis } from "../enums/dias-da-semana.js";
@@ -10,8 +11,11 @@ import { NegociacaoesView } from "../views/negociacoes-view.js";
  * Comentário de classe
  */
 export class NegociacaoController {
+    @domInject('#data')
     private inputData: HTMLInputElement;
+    @domInject('#quantidade')
     private inputQuantidade: HTMLInputElement;
+    @domInject('#valor')
     private inputValor: HTMLInputElement;
     private negociacoes = new Negociacoes();
     private negociacoesView = new NegociacaoesView("#negociacoesView");
@@ -21,11 +25,6 @@ export class NegociacaoController {
      * Comentário de construtor
      */
     constructor() {
-        this.inputData = document.querySelector("#data") as HTMLInputElement;
-        this.inputQuantidade = document.querySelector(
-            "#quantidade"
-        ) as HTMLInputElement;
-        this.inputValor = document.querySelector("#valor") as HTMLInputElement;
         this.negociacoesView.update(this.negociacoes);
     }
 
@@ -66,8 +65,6 @@ export class NegociacaoController {
         this.mensagemView.update("Negociação adicionada com sucesso!");
     }
 
-    @inspecionar
-    @logarTempoDeExecucao()
     private ehDiaUtil(data: Date): boolean {
         return DiasUteis.includes(data.getDay());
     }
