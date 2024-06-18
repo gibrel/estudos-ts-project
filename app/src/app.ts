@@ -12,3 +12,13 @@ if (form) {
         `Não foi possível inicializar a aplicação. Verifique se o forms está presente na página.`
     );
 }
+const botaoImporta = document.querySelector("#botao-importa");
+if (botaoImporta) {
+    form.addEventListener("click", () => {
+        controller.importaDados();
+    });
+} else {
+    throw Error(
+        `Não foi possível inicializar a aplicação. Verifique se o botao importa está presente na página.`
+    );
+}

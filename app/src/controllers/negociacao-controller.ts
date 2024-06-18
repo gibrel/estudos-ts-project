@@ -4,6 +4,7 @@ import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
 import { DiasUteis } from "../enums/dias-da-semana.js";
 import { Negociacao } from "../models/negociacao.js";
 import { Negociacoes } from "../models/negociacoes.js";
+import { NegociacaoService } from "../services/negociacao-service.js";
 import { MensagemView } from "../views/mensagem-view.js";
 import { NegociacaoesView } from "../views/negociacoes-view.js";
 
@@ -11,15 +12,16 @@ import { NegociacaoesView } from "../views/negociacoes-view.js";
  * Comentário de classe
  */
 export class NegociacaoController {
-    @domInject('#data')
+    @domInject("#data")
     private inputData: HTMLInputElement;
-    @domInject('#quantidade')
+    @domInject("#quantidade")
     private inputQuantidade: HTMLInputElement;
-    @domInject('#valor')
+    @domInject("#valor")
     private inputValor: HTMLInputElement;
     private negociacoes = new Negociacoes();
     private negociacoesView = new NegociacaoesView("#negociacoesView");
     private mensagemView = new MensagemView("#mensagemView");
+    private negociacaoService = new NegociacaoService();
 
     /**
      * Comentário de construtor
@@ -51,6 +53,18 @@ export class NegociacaoController {
         this.negociacoes.adiciona(negociacao);
         this.limparFormulario();
         this.atualizaView();
+    }
+
+    @inspecionar
+    @logarTempoDeExecucao()
+    public importaDados(): void {
+        this.negociacaoService.obterNegociacoesDoDia().then((negociacoesDeHoje) => {
+            for (let negociacao of negociacoesDeHoje) {
+                this.negociacoes.adiciona(negociacao);
+            }
+            this.negociacoesView.update(this.negociacoes);
+            this.mensagemView.update("Negociações importadas com sucesso!");
+        });
     }
 
     private limparFormulario(): void {
