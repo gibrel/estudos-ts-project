@@ -1,4 +1,8 @@
-export function logarTempoDeExecucao() {
+import { UnidadesDeTempo } from "../enums/unidades-de-tempo.js";
+
+export function logarTempoDeExecucao(
+    unidadeDeTempo: UnidadesDeTempo = UnidadesDeTempo.AUTO
+) {
     return function (
         target: any,
         propertyKey: string,
@@ -9,21 +13,48 @@ export function logarTempoDeExecucao() {
             const t1 = performance.now();
             const retorno = metodoOriginal.apply(this, args);
             const t2 = performance.now();
-            logTime(t2 - t1);
-            retorno;
+            logaTempoMetodo(t2 - t1, unidadeDeTempo, propertyKey);
+            return retorno;
         };
         return descriptor;
     };
 }
 
-function logTime(miliseconds: number): void {
-    let logString: string;
-    if (miliseconds > 10000) {
-        logString = `Tempo de execução: ${Math.trunc(miliseconds / 1000)}s`;
-    } else if (miliseconds >= 1) {
-        logString = `Tempo de execução: ${Math.trunc(miliseconds)}ms`;
+/**
+ *
+ * @param deltaTime Tempo decorrido em milisegundos
+ * @param unidadeDeTempo Unidade de tempo desejada no log
+ * @param nomeMetodo Nome do método executado
+ * @returns Texto de tempo de execução
+ */
+function logaTempoMetodo(
+    deltaTime: number,
+    unidadeDeTempo: UnidadesDeTempo,
+    nomeMetodo: string
+): void {
+    let multiplicador: number;
+    let unidadeString: string;
+
+    if (
+        unidadeDeTempo == UnidadesDeTempo.SEGUNDOS ||
+        (unidadeDeTempo == UnidadesDeTempo.AUTO && deltaTime > 1000)
+    ) {
+        multiplicador = 0.001;
+        unidadeString = "s";
+    } else if (
+        unidadeDeTempo == UnidadesDeTempo.MILI_SEGUNDOS ||
+        (unidadeDeTempo == UnidadesDeTempo.AUTO && deltaTime >= 1)
+    ) {
+        multiplicador = 1;
+        unidadeString = "ms";
     } else {
-        logString = `Tempo de execução: ${Math.trunc(miliseconds * 1000)}us`;
+        multiplicador = 1000;
+        unidadeString = "us";
     }
-    console.log(logString);
+
+    console.log(
+        `╟────>${nomeMetodo}: Tempo de execução: ${Math.trunc(
+            deltaTime * multiplicador
+        )}${unidadeString}`
+    );
 }

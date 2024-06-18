@@ -1,3 +1,6 @@
+import { inspecionar } from "../decorators/inspecionar.js";
+import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
+
 export class Negociacao {
     constructor(
         private _data: Date,
@@ -13,6 +16,8 @@ export class Negociacao {
         return this.quantidade * this.valor;
     }
 
+    @inspecionar
+    @logarTempoDeExecucao()
     public static criaDe(
         dataString: string,
         quantidadeString: string,

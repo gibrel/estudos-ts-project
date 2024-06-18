@@ -1,3 +1,4 @@
+import { inspecionar } from "../decorators/inspecionar.js";
 import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
 import { DiasUteis } from "../enums/dias-da-semana.js";
 import { Negociacao } from "../models/negociacao.js";
@@ -13,7 +14,7 @@ export class NegociacaoController {
     private inputQuantidade: HTMLInputElement;
     private inputValor: HTMLInputElement;
     private negociacoes = new Negociacoes();
-    private negociacoesView = new NegociacaoesView("#negociacoesView", true);
+    private negociacoesView = new NegociacaoesView("#negociacoesView");
     private mensagemView = new MensagemView("#mensagemView");
 
     /**
@@ -32,6 +33,7 @@ export class NegociacaoController {
      * Comentário de método
      * @returns retorna nada, voidão
      */
+    @inspecionar
     @logarTempoDeExecucao()
     public adiciona(): void {
         const negociacao = Negociacao.criaDe(
@@ -64,6 +66,8 @@ export class NegociacaoController {
         this.mensagemView.update("Negociação adicionada com sucesso!");
     }
 
+    @inspecionar
+    @logarTempoDeExecucao()
     private ehDiaUtil(data: Date): boolean {
         return DiasUteis.includes(data.getDay());
     }
