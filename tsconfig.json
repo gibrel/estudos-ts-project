@@ -8,6 +8,7 @@
         "removeComments": true,
         "strictNullChecks": true,
         "experimentalDecorators": true,
+        "sourceMap": true
     },
     "include": ["app/src/**/*"]
 }
